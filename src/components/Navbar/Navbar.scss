@@ -1,0 +1,90 @@
+.navbar {
+  width: 15rem;
+  border-right: 1px solid lightgray;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  display: flex;
+  flex-direction: column;
+  padding: 0px 0px 0px 30px;
+
+  &.shrink {
+    width: 4rem;
+    padding: 0px 0px 0px 15px;
+    transition: transform 0.4s ease-in;
+  }
+  .logo {
+    padding: 3rem 0px;
+    .logo-icon {
+      height: 28px;
+      width: 28px;
+      cursor: pointer;
+    }
+    .navLogo {
+      font-family: "Billabong", cursive;
+      font-weight: 550;
+      font-size: 24px;
+      color: #262626;
+    }
+  }
+  .navItems {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+    a {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+
+      &.active {
+        font-weight: bold;
+      }
+      img {
+        height: 25px;
+        width: 25px;
+      }
+      .profile-icon {
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+  }
+  .menu {
+    padding: 10rem 0px 1.5rem 0px;
+
+    .menu-options {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      cursor: pointer;
+    }
+    .menu-box {
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      height: 6.2rem;
+      width: 12rem;
+      margin: 15px 0px;
+      box-shadow: 1.5px 1.5px 9.5px 0.5px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 20px 0px 0px 35px;
+      gap: 15px;
+
+      .saved {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-bottom: 1px solid lightgray;
+        padding: 0px 0px 10px 0px;
+        cursor: pointer;
+      }
+      .logout {
+        padding: 0px 0px 15px 5px;
+        cursor: pointer;
+      }
+    }
+  }
+}

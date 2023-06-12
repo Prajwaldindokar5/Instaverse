@@ -1,0 +1,11 @@
+.home {
+  flex: 1;
+  overflow: auto;
+  padding: 3rem 0 0 25rem;
+
+  .status-section {
+    width: 40rem;
+    height: 6rem;
+    overflow: hidden;
+  }
+}

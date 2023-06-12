@@ -1,0 +1,19 @@
+.explore {
+  flex: 1;
+  overflow: auto;
+  padding: 3rem 0 0 15rem;
+
+  .explore-posts {
+    display: grid;
+    grid-template-columns: 15rem 15rem 15rem;
+    justify-content: center;
+    gap: 5px;
+    padding: 25px;
+    .explore-post {
+      height: 15rem;
+      width: 15rem;
+      cursor: pointer;
+      object-fit: cover;
+    }
+  }
+}

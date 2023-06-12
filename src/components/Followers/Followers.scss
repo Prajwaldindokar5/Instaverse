@@ -1,0 +1,93 @@
+.followers-info {
+  z-index: 1000;
+  height: 25rem;
+  width: 25rem;
+  background-color: #fefefe;
+  position: fixed;
+  top: 8.5rem;
+  right: 34rem;
+  border-radius: 10px;
+  overflow-y: auto;
+
+  .followers-info-head {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid lightgray;
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+    background-color: #fefefe;
+  }
+
+  .followersInfo .follower-info {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    img {
+      height: 35px;
+      width: 35px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 20px;
+    }
+
+    .username {
+      margin-right: 5px;
+    }
+
+    .follow {
+      color: #0095f6;
+      font-size: 13px;
+
+      cursor: pointer;
+    }
+
+    .remove-btn {
+      padding: 8px 20px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+      position: absolute;
+      right: 15px;
+    }
+    .dynamic-btn {
+      display: flex;
+      align-items: center;
+    }
+    .profile-follow-btn {
+      border: none;
+      height: 40px;
+      width: 80px;
+      border-radius: 5px;
+      font-weight: 500;
+      cursor: pointer;
+      background-color: #0095f6;
+      color: white;
+      position: absolute;
+      left: 17.4rem;
+    }
+    .profile-following-btn {
+      border: none;
+      height: 40px;
+      width: 80px;
+      border-radius: 5px;
+      font-weight: 500;
+      cursor: pointer;
+      background-color: #efefef;
+      color: black;
+      position: absolute;
+      left: 17.4rem;
+    }
+  }
+}
+.info-closeIcon {
+  right: 35rem;
+  z-index: 1000;
+  position: fixed;
+  top: 8.9rem;
+  cursor: pointer;
+  font-size: 1.7rem;
+  font-weight: bold;
+  color: #000;
+}

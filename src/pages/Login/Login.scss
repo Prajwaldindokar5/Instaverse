@@ -1,0 +1,65 @@
+.login {
+  height: 31rem;
+  width: 25%;
+  margin: 5% 37.5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid lightgray;
+  gap: 70px;
+  position: relative;
+  .form-head {
+    font-family: "Billabong", cursive;
+    font-weight: 550;
+    font-size: 35px;
+    color: #262626;
+    padding-top: 35px;
+  }
+  .login-form {
+    display: grid;
+    gap: 5px;
+    width: 100%;
+    justify-items: center;
+
+    input {
+      height: 30px;
+      width: 75%;
+      border: 1px solid lightgray;
+      background: whitesmoke;
+      padding: 10px;
+
+      &:focus {
+        outline: none;
+      }
+    }
+    .login-btn {
+      font-weight: bold;
+      border-radius: 10px;
+      border: none;
+      background-color: #0095f6;
+      color: #fff;
+      cursor: pointer;
+      width: 75%;
+      height: 35px;
+      margin: 15px 0px 0px 0px;
+    }
+    .or {
+      opacity: 0.7;
+      padding-top: 10px;
+    }
+    .register-link {
+      color: #0095f6;
+      opacity: 0.8;
+    }
+    .forgot-link {
+      opacity: 0.7;
+      padding: 20px 0px 0px 0px;
+    }
+  }
+  .error-message {
+    position: absolute;
+    bottom: 1rem;
+    color: red;
+    text-decoration: underline;
+  }
+}
