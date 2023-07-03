@@ -3,11 +3,11 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import FormInput from "../../components/FormInput/FormInput";
 import { useRef, useState } from "react";
-import NewRequest from "../../utils/newRequest";
 import Upload from "../../utils/upload";
 import { useSelector, useDispatch } from "react-redux";
-
-import { setUser } from "../../state/slice";
+import { useNavigate } from "react-router-dom";
+import { setUser } from "../../Slices/authSlice";
+import { useEditProfileMutation } from "../../Slices/userApiSlice";
 
 const EditProfile = () => {
   const fileInputRef = useRef(null);
@@ -15,31 +15,33 @@ const EditProfile = () => {
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.auth.userInfo);
   const dispatch = useDispatch();
+  const [editProfile] = useEditProfileMutation();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
-      name: user.name,
-      username: user.username,
+      name: user.name || "",
+      username: user.username || "",
       photo: "",
-      bio: user.bio,
-      email: user.email,
+      bio: user.bio || "",
+      email: user.email || "",
     },
     validationSchema: yup.object({
       email: yup.string().email("Invalid Email"),
     }),
     onSubmit: async (values) => {
       const fileUrl = file ? await Upload(file) : user.photo;
-      try {
-        const res = await NewRequest.patch("/user/updateProfile", {
-          ...values,
-          photo: fileUrl,
-        });
+      const data = {
+        ...values,
+        photo: fileUrl,
+      };
+      const res = await editProfile({ data });
 
+      if (res.data?.status === "success") {
         dispatch(setUser(res.data.user));
-      } catch (error) {
-        console.log(error);
+        navigate(`/${user.username}`);
       }
     },
   });

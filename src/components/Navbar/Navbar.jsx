@@ -3,10 +3,12 @@ import "./Navbar.scss";
 import { Link } from "react-router-dom";
 import Search from "../Search/Search";
 import Create from "../create/Create";
-import NewRequest from "../../utils/newRequest";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsSearch, setNavShrink, setUser } from "../../state/slice";
+import { setIsSearch, setNavShrink } from "../../Slices/appSlice";
 import { useNavigate } from "react-router-dom";
+import { logoutUser } from "../../Slices/authSlice";
+import Cookies from "js-cookie";
+import { useLogoutMutation } from "../../Slices/userApiSlice";
 
 const Navbar = () => {
   const [isMenu, setIsMenu] = useState(false);
@@ -14,9 +16,10 @@ const Navbar = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user);
-  const isSearch = useSelector((state) => state.isSearch);
-  const navShrink = useSelector((state) => state.navShrink);
+  const user = useSelector((state) => state.auth.userInfo);
+  const isSearch = useSelector((state) => state.app.isSearch);
+  const navShrink = useSelector((state) => state.app.navShrink);
+  const [logout] = useLogoutMutation();
 
   const handleSearchClick = () => {
     dispatch(setIsSearch(!isSearch));
@@ -24,10 +27,11 @@ const Navbar = () => {
   };
   const handleLogoutClick = async () => {
     try {
-      const res = await NewRequest.get("/user/logout");
-      if (res.data.status === "success") {
-        dispatch(setUser(null));
+      const res = await logout();
+      if (res.data?.status === "success") {
+        dispatch(logoutUser(null));
         navigate("/");
+        Cookies.remove("jwt");
         window.location.reload();
       }
     } catch (error) {}

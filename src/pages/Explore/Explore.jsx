@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import "./Explore.scss";
 
 const Explore = () => {
-  const posts = useSelector((state) => state.allPosts);
+  const posts = useSelector((state) => state.app.allPosts);
   return (
     <div className="explore">
       <div className="explore-posts">

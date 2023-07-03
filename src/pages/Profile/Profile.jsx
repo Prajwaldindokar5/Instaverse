@@ -4,8 +4,13 @@ import { Link, useLocation } from "react-router-dom";
 import Followers from "../../components/Followers/Followers";
 import Following from "../../components/Following/Following";
 import { useSelector, useDispatch } from "react-redux";
-import { setGetUser, setUser } from "../../state/slice";
-import NewRequest from "../../utils/newRequest";
+import { setGetUser } from "../../Slices/appSlice";
+import { setUser } from "../../Slices/authSlice";
+import { useGetUserQuery } from "../../Slices/apiSlice";
+import {
+  useFollowUserMutation,
+  useUnfollowUserMutation,
+} from "../../Slices/userApiSlice";
 
 const Profile = () => {
   const [isSaved, setIsSaved] = useState(false);
@@ -13,7 +18,6 @@ const Profile = () => {
   const [postIsActive, setPostIsActive] = useState(true);
   const [isFollowers, setisFollowers] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSavedClick = () => {
     setIsSaved(true);
@@ -26,50 +30,47 @@ const Profile = () => {
     setPostIsActive(true);
   };
 
-  const currentUser = useSelector((state) => state.user);
-  const user = useSelector((state) => state.getUser);
-  const saved = user.saved;
+  const currentUser = useSelector((state) => state.auth.userInfo);
+  const user = useSelector((state) => state.app.getUser);
+  const saved = user?.saved;
 
-  const posts = [...user.posts].sort((a, b) => {
+  const posts = [...(user?.posts || [])].sort((a, b) => {
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
 
   const dispatch = useDispatch();
   const location = useLocation();
   const username = location.pathname.split("/")[1];
+  const { data, isLoading } = useGetUserQuery(username);
+  const [followUser] = useFollowUserMutation();
+  const [unfollowUser] = useUnfollowUserMutation();
 
   useEffect(() => {
-    setIsLoading(true);
-    const fetchData = async () => {
-      const res = await NewRequest.get(`/user/profile/${username}`);
-      if (res.data.status === "success") {
-        setIsLoading(false);
-      }
-      dispatch(setGetUser(res.data.user));
-    };
-    fetchData();
-  }, [username, dispatch]);
+    if (data?.status === "success") {
+      dispatch(setGetUser(data.user));
+    }
+  }, [username, dispatch, data, followUser, unfollowUser]);
 
   const handleFollow = async (userId) => {
-    try {
-      const res = await NewRequest.post(`/user/manageFollow/${userId}`);
-      dispatch(setUser(res.data.currentuser));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    const res = await followUser(userId);
 
-  const handleUnFollow = async (userId) => {
-    try {
-      const res = await NewRequest.post(`/user/manageUnfollow/${userId}`);
+    if (res.data?.status === "success") {
       dispatch(setUser(res.data.currentuser));
-    } catch (error) {
-      console.log(error);
     }
   };
+  const handleUnFollow = async (userId) => {
+    const res = await unfollowUser(userId);
+
+    if (res.data?.status === "success") {
+      dispatch(setUser(res.data.currentuser));
+    }
+  };
+  if (isLoading) {
+    return <div className="profile">...loading</div>;
+  }
   return (
     <>
-      <div className={`profile ${isLoading ? "load" : ""}`}>
+      <div className="profile">
         <section className="profile-head">
           <img src={user?.photo} alt="" className="profile-img" />
           <div className="profile-info">
@@ -81,19 +82,19 @@ const Profile = () => {
                 </Link>
               ) : (
                 <div>
-                  {currentUser?.following.some((id) => id._id === user._id) ? (
+                  {currentUser?.following.some((id) => id._id === user?._id) ? (
                     <button
                       className="profile-following-btn "
-                      onClick={() => handleUnFollow(user._id)}
+                      onClick={() => handleUnFollow(user?._id)}
                     >
                       following
                     </button>
                   ) : (
                     <button
                       className="profile-follow-btn "
-                      onClick={() => handleFollow(user._id)}
+                      onClick={() => handleFollow(user?._id)}
                     >
-                      {currentUser?.followers.some((id) => id._id === user._id)
+                      {currentUser?.followers.some((id) => id._id === user?._id)
                         ? "follow back"
                         : "follow"}
                     </button>

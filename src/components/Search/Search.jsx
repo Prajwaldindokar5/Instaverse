@@ -1,24 +1,27 @@
 import { useDispatch, useSelector } from "react-redux";
 import "./Search.scss";
 import { useState } from "react";
-import { setAllUsers } from "../../state/slice";
-import NewRequest from "../../utils/newRequest";
-import { setIsSearch, setNavShrink } from "../../state/slice";
+import { setAllUsers } from "../../Slices/appSlice";
+import { setIsSearch, setNavShrink } from "../../Slices/appSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useAllUsersQuery } from "../../Slices/apiSlice";
 const Search = () => {
-  const users = useSelector((state) => state.allUsers);
+  const users = useSelector((state) => state.app.allUsers);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { data } = useAllUsersQuery();
+
   useEffect(() => {
     const fetchData = async () => {
-      const res = await NewRequest.get("/user");
-      dispatch(setAllUsers(res.data.users));
+      if (data?.status === "success") {
+        dispatch(setAllUsers(data.users));
+      }
     };
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, data]);
 
   const [searchString, setSearchString] = useState("");
   const [isLength, setIsLength] = useState(false);

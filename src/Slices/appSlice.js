@@ -3,8 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 export const appSlicer = createSlice({
   name: "data",
   initialState: {
-    user: null,
-
     userPosts: null,
     allPosts: [],
     getUser: null,
@@ -15,10 +13,6 @@ export const appSlicer = createSlice({
   },
 
   reducers: {
-    setUser(state, action) {
-      state.user = action.payload;
-    },
-
     setAllPosts(state, action) {
       state.allPosts = action.payload;
     },
@@ -41,8 +35,6 @@ export const appSlicer = createSlice({
 });
 
 export const {
-  setUser,
-
   setAllPosts,
   setGetUser,
   setAllUsers,

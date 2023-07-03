@@ -2,12 +2,14 @@ import "./ForgotPassword.scss";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import FormInput from "../../components/FormInput/FormInput";
-import NewRequest from "../../utils/newRequest";
 import { useState } from "react";
+import { useForgotPasswordMutation } from "../../Slices/userApiSlice";
 
 const ForgotPassword = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+
+  const [forgotPassword] = useForgotPasswordMutation();
 
   const formik = useFormik({
     initialValues: {
@@ -17,14 +19,11 @@ const ForgotPassword = () => {
       username: yup.string().required("Required"),
     }),
     onSubmit: async (values) => {
-      try {
-        const res = await NewRequest.post("/user/forgotPassword", {
-          ...values,
-        });
-        if (res.data.status === "success") {
-          setSuccess("Mail Send To Your Registered Email");
-        }
-      } catch (error) {
+      const res = await forgotPassword(values);
+
+      if (res.data.status === "success") {
+        setSuccess("Mail Send To Your Registered Email");
+      } else {
         setError("Unable To send Mail");
         console.log(error);
       }

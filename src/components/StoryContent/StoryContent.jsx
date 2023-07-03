@@ -1,17 +1,14 @@
 import { useSelector } from "react-redux";
 import "./StoryContent.scss";
-import NewRequest from "../../utils/newRequest";
+import { useDeleteStoryMutation } from "../../Slices/apiSlice";
 
 const StoryContent = ({ story }) => {
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.auth.userInfo);
+  const [deleteStory] = useDeleteStoryMutation();
   const handleDeleteStory = async () => {
-    try {
-      const res = await NewRequest.delete(`/story/${story._id}`);
-      if (res.data.status === "success") {
-        window.location.reload();
-      }
-    } catch (error) {
-      console.log(error);
+    const res = await deleteStory(story._id);
+    if (res.data.status === "success") {
+      window.location.reload();
     }
   };
   return (

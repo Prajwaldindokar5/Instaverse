@@ -3,14 +3,15 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import FormInput from "../../components/FormInput/FormInput";
 import { Link } from "react-router-dom";
-import NewRequest from "../../utils/newRequest";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../state/slice";
+import { setToken, setUser } from "../../Slices/authSlice";
 import { useState } from "react";
+import { useLoginMutation } from "../../Slices/userApiSlice";
 
 const Login = () => {
   const [error, setError] = useState(false);
 
+  const [login] = useLoginMutation();
   const dispatch = useDispatch();
 
   const formik = useFormik({
@@ -23,14 +24,14 @@ const Login = () => {
       password: yup.string().required("Required"),
     }),
     onSubmit: async (values) => {
-      try {
-        const res = await NewRequest.post("/user/login", {
-          ...values,
-        });
-        dispatch(setUser(res.data.user));
-        window.location.reload();
-      } catch (error) {
-        setError(error.response.data.message);
+      const res = await login(values);
+
+      if (res.data?.status === "success") {
+        const { user, token } = res.data;
+        dispatch(setUser(user));
+        dispatch(setToken(token));
+      } else {
+        setError(res.error.data.message);
       }
     },
   });

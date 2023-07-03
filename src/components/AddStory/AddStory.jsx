@@ -1,34 +1,26 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import "./AddStory.scss";
-import Upload from "../../utils/upload";
-import NewRequest from "../../utils/newRequest";
+import { useFileUrl } from "../../utils/customHooks";
+import { useAddStoryMutation } from "../../Slices/apiSlice";
 
 const AddStory = () => {
   const fileInputRef = useRef(null);
   const [file, setFile] = useState("");
-  const [isFile, setIsFile] = useState();
+  const isFile = useFileUrl(file);
 
   const handleButtonClick = async (e) => {
     fileInputRef.current.click();
   };
 
-  useEffect(() => {
-    const handleSelectedFile = async () => {
-      const fileUrl = file ? await Upload(file) : null;
-      setIsFile(fileUrl);
-    };
-    handleSelectedFile();
-  }, [file]);
+  const [addStory] = useAddStoryMutation();
 
   const handleAddClick = async () => {
-    try {
-      const res = await NewRequest.post("/story/addStory", {
-        story: isFile,
-      });
-
+    const data = {
+      story: isFile,
+    };
+    const res = await addStory(data);
+    if (res.data?.status === "success") {
       window.location.reload();
-    } catch (error) {
-      console.log(error);
     }
   };
   return (

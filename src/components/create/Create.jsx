@@ -1,39 +1,29 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import "./Create.scss";
-import Upload from "../../utils/upload";
-import NewRequest from "../../utils/newRequest";
 import { useNavigate } from "react-router-dom";
+import { useFileUrl } from "../../utils/customHooks";
+import { useAddPostMutation } from "../../Slices/apiSlice";
 
 const Create = () => {
   const fileInputRef = useRef(null);
   const [file, setFile] = useState("");
-  const [isFile, setIsFile] = useState();
+  const isFile = useFileUrl(file);
   const [caption, setCaption] = useState("");
   const handleButtonClick = async (e) => {
     fileInputRef.current.click();
   };
 
-  useEffect(() => {
-    const handleSelectedFile = async () => {
-      const fileUrl = file ? await Upload(file) : null;
-      setIsFile(fileUrl);
-    };
-    handleSelectedFile();
-  }, [file]);
-
   const navigate = useNavigate();
 
+  const [addPost] = useAddPostMutation();
+
   const handlePostClick = async () => {
-    try {
-      const res = await NewRequest.post("/post", {
-        content: isFile,
-        caption,
-      });
-      navigate("/");
-      window.location.reload();
-    } catch (error) {
-      console.log(error);
-    }
+    const data = {
+      content: isFile,
+      caption: caption,
+    };
+    await addPost(data);
+    navigate("/");
   };
   return (
     <div className="create-container ">

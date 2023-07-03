@@ -1,41 +1,44 @@
 import { useSelector, useDispatch } from "react-redux";
-import { setGetUser } from "../../state/slice";
-import NewRequest from "../../utils/newRequest";
+import { setGetUser } from "../../Slices/appSlice";
+import {
+  useFollowUserMutation,
+  useRemoveFollowerMutation,
+} from "../../Slices/userApiSlice";
 import { useEffect } from "react";
 import "./Followers.scss";
-import { setUser } from "../../state/slice";
+import { setUser } from "../../Slices/authSlice";
+import { useGetUserQuery } from "../../Slices/apiSlice";
 
 const Followers = () => {
-  const user = useSelector((state) => state.getUser);
-  const currentuser = useSelector((state) => state.user);
+  const user = useSelector((state) => state.app.getUser);
+  const currentuser = useSelector((state) => state.auth.userInfo);
   const usernamePath = window.location.href.split("/")[3];
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await NewRequest.get(`/user/profile/${usernamePath}`);
+  const { data } = useGetUserQuery(usernamePath);
 
-      dispatch(setGetUser(res.data.user));
-    };
-    fetchData();
-  }, [usernamePath, dispatch]);
+  useEffect(() => {
+    if (data?.status === "success") {
+      dispatch(setGetUser(data.user));
+    }
+  }, [usernamePath, dispatch, data]);
+
+  const [followUser] = useFollowUserMutation();
 
   const handleFollow = async (userId) => {
-    try {
-      const res = await NewRequest.post(`/user/manageFollow/${userId}`);
+    const res = await followUser(userId);
+
+    if (res.data?.status === "success") {
       dispatch(setUser(res.data.currentuser));
-    } catch (error) {
-      console.log(error);
     }
   };
 
+  const [removeFollower] = useRemoveFollowerMutation();
   const handleRemoveFollower = async (userId) => {
-    try {
-      const res = await NewRequest.post(`/user/removeFollower/${userId}`);
+    const res = await removeFollower(userId);
+    if (res.data?.status === "success") {
       dispatch(setUser(res.data.currentuser));
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -43,7 +46,7 @@ const Followers = () => {
     if (currentuser.username === usernamePath) {
       return (
         <button
-          className="remove-btn"
+          className="remove-btn "
           onClick={() => handleRemoveFollower(userId)}
         >
           Remove
@@ -84,7 +87,7 @@ const Followers = () => {
             <div className="follower-info" key={_id}>
               <img src={photo} alt="" />
               <span className="username">{username}</span>
-              <div className="dynamic-btn">{renderBtn(_id)}</div>
+              {renderBtn(_id)}
             </div>
           );
         })}

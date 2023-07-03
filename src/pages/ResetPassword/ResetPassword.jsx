@@ -3,13 +3,14 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import FormInput from "../../components/FormInput/FormInput";
 import { useNavigate, useLocation } from "react-router-dom";
-import NewRequest from "../../utils/newRequest";
 import { useState } from "react";
+import { useResetPasswordMutation } from "../../Slices/userApiSlice";
 
 const ResetPassword = () => {
   const [error, setError] = useState(false);
   const token = useLocation().pathname.split("/")[3];
   const navigate = useNavigate();
+  const [resetPassword] = useResetPasswordMutation();
 
   const formik = useFormik({
     initialValues: {
@@ -29,14 +30,13 @@ const ResetPassword = () => {
     }),
 
     onSubmit: async (values) => {
-      try {
-        const res = await NewRequest.patch(`/user/resetPassword/${token}`, {
-          ...values,
-        });
-        if (res.data.status === "success") {
-          navigate("/");
-        }
-      } catch (error) {
+      const data = {
+        password: values.password,
+      };
+      const res = await resetPassword({ token, data });
+      if (res.data.status === "success") {
+        navigate("/");
+      } else {
         setError(error.response.data.message);
       }
     },

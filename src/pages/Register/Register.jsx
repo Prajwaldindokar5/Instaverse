@@ -2,14 +2,15 @@ import "./Register.scss";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import FormInput from "../../components/FormInput/FormInput";
-import NewRequest from "../../utils/newRequest";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../state/slice";
+import { setToken, setUser } from "../../Slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useRegisterMutation } from "../../Slices/userApiSlice";
 
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [register] = useRegisterMutation();
 
   const formik = useFormik({
     initialValues: {
@@ -28,16 +29,11 @@ const Register = () => {
       name: yup.string().required("Required"),
     }),
     onSubmit: async (values) => {
-      try {
-        const res = await NewRequest.post("/user/register", {
-          ...values,
-        });
-        if (res.data.status === "success") {
-          dispatch(setUser(res.data.user));
-          navigate("/");
-        }
-      } catch (error) {
-        console.log(error);
+      const res = await register(values);
+      if (res.data.status === "success") {
+        dispatch(setUser(res.data.user));
+        dispatch(setToken(res.data.token));
+        navigate("/");
       }
     },
   });
