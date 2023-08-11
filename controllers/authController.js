@@ -22,7 +22,6 @@ const sendResponse = (user, res, statusCode) => {
   res.cookie('jwt', token).status(statusCode).json({
     status: 'success',
     user,
-    token,
   });
 };
 

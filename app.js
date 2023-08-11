@@ -3,8 +3,8 @@ import express from 'express';
 import morgan from 'morgan';
 import AppError from './utils/appError.js';
 import globalErrorHandler from './controllers/errorController.js';
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import userRouter from './routes/userRoutes.js';
 import postRouter from './routes/postRoutes.js';
 import commentRouter from './routes/commentRoutes.js';
@@ -17,8 +17,8 @@ dotenv.config();
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-app.use(express.json());
 app.use(cookieParser());
+app.use(express.json());
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 
 //routes

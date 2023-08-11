@@ -27,7 +27,7 @@ router.patch('/updatePassword', verify, updatePassword);
 router.post('/forgotPassword', forgotPassword);
 router.patch('/resetPassword/:token', resetPassword);
 router.patch('/updateProfile', verify, updateProfile);
-router.get('/logout', verify, logout);
+router.post('/logout', verify, logout);
 router.get('/:id', verify, getLoginUser);
 router.get('/profile/:username', verify, getUser);
 router.get('/', verify, getAllUsers);

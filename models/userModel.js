@@ -16,7 +16,6 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: true,
       unique: true,
     },
     password: {
@@ -50,6 +49,7 @@ const userSchema = new mongoose.Schema(
 
     passwordResetToken: String,
     resetTokenExpiresAt: Date,
+    facebookId: String,
   },
   {
     toJSON: { virtuals: true },

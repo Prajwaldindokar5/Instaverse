@@ -11,7 +11,8 @@ import { manageLike } from '../controllers/likeController.js';
 
 const router = express.Router();
 
-router.route('/').post(verify, createPost).get(verify, getAllPosts);
+router.post('/', verify, createPost);
+router.get('/', verify, getAllPosts);
 router
   .route('/:id')
   .get(verify, getPost)

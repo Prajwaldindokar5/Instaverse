@@ -1,7 +1,6 @@
 import Post from '../models/postModel.js';
 import asyncHandler from 'express-async-handler';
 import AppError from '../utils/appError.js';
-import { query } from 'express';
 
 export const createPost = asyncHandler(async (req, res, next) => {
   const { content, caption } = req.body;
@@ -22,7 +21,7 @@ export const createPost = asyncHandler(async (req, res, next) => {
 
 export const getAllPosts = asyncHandler(async (req, res, next) => {
   const posts = await Post.find().sort('-createdAt');
-  
+
   res.status(200).json({
     results: posts.length,
     status: 'success',
