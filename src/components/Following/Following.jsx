@@ -4,7 +4,7 @@ import { setGetUser } from "../../Slices/appSlice";
 import { setUser } from "../../Slices/authSlice";
 import { useFollowUserMutation } from "../../Slices/userApiSlice";
 import { useEffect } from "react";
-import { useGetUserQuery } from "../../Slices/apiSlice";
+import { useGetUserQuery } from "../../Slices/userApiSlice";
 
 const Following = () => {
   const user = useSelector((state) => state.app.getUser);

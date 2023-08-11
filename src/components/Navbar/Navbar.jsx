@@ -4,15 +4,14 @@ import { Link } from "react-router-dom";
 import Search from "../Search/Search";
 import Create from "../create/Create";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsSearch, setNavShrink } from "../../Slices/appSlice";
+import { setIsCreate, setIsSearch, setNavShrink } from "../../Slices/appSlice";
 import { useNavigate } from "react-router-dom";
 import { logoutUser } from "../../Slices/authSlice";
-import Cookies from "js-cookie";
 import { useLogoutMutation } from "../../Slices/userApiSlice";
 
 const Navbar = () => {
   const [isMenu, setIsMenu] = useState(false);
-  const [isCreate, setIsCreate] = useState(false);
+  const isCreate = useSelector((state) => state.app.isCreate);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,8 +30,6 @@ const Navbar = () => {
       if (res.data?.status === "success") {
         dispatch(logoutUser(null));
         navigate("/");
-        Cookies.remove("jwt");
-        window.location.reload();
       }
     } catch (error) {}
   };
@@ -82,7 +79,7 @@ const Navbar = () => {
           <Link
             className="link"
             to={"#"}
-            onClick={() => setIsCreate(!isCreate)}
+            onClick={() => dispatch(setIsCreate(!isCreate))}
           >
             {navShrink ? (
               <img src="../img/createIcon.svg" alt="" className="nav-icon" />
@@ -141,7 +138,7 @@ const Navbar = () => {
           <div className="overlay"></div>
           <span
             className="material-symbols-outlined closeIcon"
-            onClick={() => setIsCreate(false)}
+            onClick={() => dispatch(setIsCreate(false))}
           >
             close
           </span>

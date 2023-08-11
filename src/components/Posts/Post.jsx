@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./Post.scss";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setAllPosts } from "../../Slices/appSlice";
+import { setAllPosts, setFollowingPosts } from "../../Slices/appSlice";
 import { setUser } from "../../Slices/authSlice";
 import Comments from "../Comments/Comments";
 
@@ -29,6 +29,7 @@ const Post = () => {
   }, [data, dispatch]);
 
   const posts = useSelector((state) => state.app.allPosts);
+  const followingUserPosts = useSelector((state) => state.app.followingPosts);
 
   const [manageLike] = useManageLikeMutation();
 
@@ -85,6 +86,26 @@ const Post = () => {
     setCommentData(post.comments);
   };
 
+  const followingPosts = () => {
+    let filteredPosts = [];
+    let followingUserIds = [];
+
+    // Assuming 'user' and 'posts' are defined somewhere in your code
+    user?.following?.forEach((idObject) => {
+      followingUserIds.push(idObject.id);
+    });
+
+    filteredPosts = posts?.filter((post) => {
+      return followingUserIds.includes(post.user.id);
+    });
+
+    dispatch(setFollowingPosts(filteredPosts));
+  };
+
+  useEffect(() => {
+    followingPosts();
+  }, [posts]);
+
   return (
     <>
       <div className="post-container">
@@ -92,7 +113,7 @@ const Post = () => {
           <div className="post">...loading</div>
         ) : (
           <>
-            {posts?.map((post) => {
+            {followingUserPosts?.map((post) => {
               return (
                 <div className="post" key={post.id}>
                   <section className="user-info-container">

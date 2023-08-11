@@ -10,18 +10,12 @@ import "./App.scss";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import { useSelector } from "react-redux";
-import Cookie from "js-cookie";
 
 const App = () => {
   const Layout = () => {
-    const token = useSelector((state) => state.auth.token);
+    const user = useSelector((state) => state.auth.userInfo);
 
-    if (token) {
-      Cookie.set("jwt", token, { expires: 1 });
-    }
-    const cookie = Cookie.get("jwt");
-
-    if (!cookie) {
+    if (!user) {
       return <Login />;
     }
     return (

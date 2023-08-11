@@ -60,21 +60,37 @@ const userAPI = createApi({
       }),
     }),
     followUser: builder.mutation({
+      invalidatesTags: ["UPDATE"],
       query: (userId) => ({
         method: "POST",
         url: `/manageFollow/${userId}`,
       }),
     }),
     removeFollower: builder.mutation({
+      invalidatesTags: ["UPDATE"],
       query: (userId) => ({
         method: "POST",
         url: `/removeFollower/${userId}`,
       }),
     }),
     unfollowUser: builder.mutation({
+      invalidatesTags: ["UPDATE"],
       query: (userId) => ({
         method: "POST",
         url: `/manageUnfollow/${userId}`,
+      }),
+    }),
+    getUser: builder.query({
+      providesTags: ["UPDATE"],
+      query: (username) => ({
+        method: "GET",
+        url: `/profile/${username}`,
+      }),
+    }),
+    getLoginUser: builder.mutation({
+      query: () => ({
+        method: "POST",
+        url: "/loginUser",
       }),
     }),
   }),
@@ -90,6 +106,8 @@ export const {
   useFollowUserMutation,
   useRemoveFollowerMutation,
   useUnfollowUserMutation,
+  useGetUserQuery,
+  useGetLoginUserMutation,
 } = userAPI;
 
 export default userAPI;

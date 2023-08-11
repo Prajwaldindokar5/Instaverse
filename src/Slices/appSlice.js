@@ -10,6 +10,8 @@ export const appSlicer = createSlice({
     isSearch: false,
     navShrink: false,
     stories: [],
+    isCreate: false,
+    followingPosts: [],
   },
 
   reducers: {
@@ -31,6 +33,12 @@ export const appSlicer = createSlice({
     setStories(state, action) {
       state.stories = action.payload;
     },
+    setIsCreate(state, action) {
+      state.isCreate = action.payload;
+    },
+    setFollowingPosts(state, action) {
+      state.followingPosts = action.payload;
+    },
   },
 });
 
@@ -41,6 +49,9 @@ export const {
   setIsSearch,
   setNavShrink,
   setStories,
+  setFBLogin,
+  setIsCreate,
+  setFollowingPosts,
 } = appSlicer.actions;
 
 export default appSlicer.reducer;

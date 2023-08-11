@@ -7,7 +7,7 @@ import {
 import { useEffect } from "react";
 import "./Followers.scss";
 import { setUser } from "../../Slices/authSlice";
-import { useGetUserQuery } from "../../Slices/apiSlice";
+import { useGetUserQuery } from "../../Slices/userApiSlice";
 
 const Followers = () => {
   const user = useSelector((state) => state.app.getUser);
@@ -52,7 +52,7 @@ const Followers = () => {
           Remove
         </button>
       );
-    } else if (currentuser.following.some((id) => id._id === userId)) {
+    } else if (currentuser?.following?.some((id) => id._id === userId)) {
       return (
         <button
           className="profile-following-btn "
@@ -62,7 +62,7 @@ const Followers = () => {
         </button>
       );
     } else if (
-      user.followers.some(
+      user?.followers?.some(
         (id) => id._id === currentuser._id && id._id === userId
       )
     ) {

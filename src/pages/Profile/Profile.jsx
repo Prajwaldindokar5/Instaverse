@@ -6,7 +6,7 @@ import Following from "../../components/Following/Following";
 import { useSelector, useDispatch } from "react-redux";
 import { setGetUser } from "../../Slices/appSlice";
 import { setUser } from "../../Slices/authSlice";
-import { useGetUserQuery } from "../../Slices/apiSlice";
+import { useGetUserQuery } from "../../Slices/userApiSlice";
 import {
   useFollowUserMutation,
   useUnfollowUserMutation,
@@ -138,11 +138,16 @@ const Profile = () => {
               className={`post-heading ${savedIsActive ? "active" : ""}`}
               onClick={handleSavedClick}
             >
-              <img src="../img/saveIcon.svg" alt="" className="postIcon" />
-              <span>SAVED</span>
+              {currentUser.username === username && (
+                <>
+                  {" "}
+                  <img src="../img/saveIcon.svg" alt="" className="postIcon" />
+                  <span>SAVED</span>{" "}
+                </>
+              )}
             </div>
           </section>
-          {isSaved ? (
+          {isSaved && currentUser.username === username ? (
             <>
               <div className="posts">
                 {saved?.map(({ content, _id }) => {

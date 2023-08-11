@@ -20,12 +20,7 @@ const apiSLice = createApi({
         url: "/post",
       }),
     }),
-    getUser: builder.query({
-      query: (username) => ({
-        method: "GET",
-        url: `/user/profile/${username}`,
-      }),
-    }),
+
     getStories: builder.query({
       query: () => ({
         method: "GET",
@@ -86,7 +81,6 @@ const apiSLice = createApi({
 
 export const {
   useAllPostsQuery,
-  useGetUserQuery,
   useGetStoriesQuery,
   useAllUsersQuery,
   useManageLikeMutation,

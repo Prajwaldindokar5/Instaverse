@@ -1,38 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
+import secureStorage from "react-secure-storage";
 
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    userInfo: localStorage.getItem("instaverse_userInfo")
-      ? JSON.parse(localStorage.getItem("instaverse_userInfo"))
-      : null,
-
-    token: localStorage.getItem("instaverse_token")
-      ? JSON.parse(localStorage.getItem("instaverse_token"))
+    userInfo: secureStorage.getItem("instaverse_userInfo")
+      ? JSON.parse(secureStorage.getItem("instaverse_userInfo"))
       : null,
   },
   reducers: {
     setUser(state, action) {
       const user = action.payload;
       state.userInfo = user;
-
-      localStorage.setItem("instaverse_userInfo", JSON.stringify(user));
-    },
-    setToken(state, action) {
-      const token = action.payload;
-      state.token = token;
-      localStorage.setItem("instaverse_token", JSON.stringify(token));
+      secureStorage.setItem("instaverse_userInfo", JSON.stringify(user));
     },
 
     logoutUser(state) {
       state.userInfo = null;
-      state.token = null;
-      localStorage.removeItem("instaverse_userInfo");
-      localStorage.removeItem("instaverse_token");
+      secureStorage.removeItem("instaverse_userInfo");
     },
   },
 });
 
-export const { setUser, logoutUser, setToken } = authSlice.actions;
+export const { setUser, logoutUser } = authSlice.actions;
 
 export default authSlice.reducer;

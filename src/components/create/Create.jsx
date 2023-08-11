@@ -3,6 +3,8 @@ import "./Create.scss";
 import { useNavigate } from "react-router-dom";
 import { useFileUrl } from "../../utils/customHooks";
 import { useAddPostMutation } from "../../Slices/apiSlice";
+import { useDispatch } from "react-redux";
+import { setIsCreate } from "../../Slices/appSlice";
 
 const Create = () => {
   const fileInputRef = useRef(null);
@@ -13,6 +15,7 @@ const Create = () => {
     fileInputRef.current.click();
   };
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [addPost] = useAddPostMutation();
@@ -23,6 +26,7 @@ const Create = () => {
       caption: caption,
     };
     await addPost(data);
+    dispatch(setIsCreate(false));
     navigate("/");
   };
   return (

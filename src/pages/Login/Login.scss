@@ -1,7 +1,7 @@
 .login {
-  height: 31rem;
+  height: 28rem;
   width: 25%;
-  margin: 5% 37.5%;
+  margin: 4% 37.5% 5% 37.5%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -45,15 +45,20 @@
     }
     .or {
       opacity: 0.7;
-      padding-top: 10px;
+      padding: 10px 0px;
     }
-    .register-link {
-      color: #0095f6;
-      opacity: 0.8;
+    .facebook-link {
+      color: #385185;
+
+      .facebook-icon {
+        height: 13px;
+      }
     }
+
     .forgot-link {
       opacity: 0.7;
-      padding: 20px 0px 0px 0px;
+      padding: 10px 0px 0px 0px;
+      font-size: 0.8rem;
     }
   }
   .error-message {
@@ -61,5 +66,24 @@
     bottom: 1rem;
     color: red;
     text-decoration: underline;
+  }
+}
+.dont-have-account-sec {
+  height: 5rem;
+  width: 25%;
+  margin: -60px 37.5% 5px 37.5%;
+  display: flex;
+  align-items: center;
+  border: 1px solid lightgray;
+  position: relative;
+  gap: 2px;
+  justify-content: center;
+  .register-link {
+    color: #0095f6;
+    opacity: 0.8;
+    font-size: 0.9rem;
+  }
+  span {
+    font-size: 0.85rem;
   }
 }
